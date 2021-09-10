@@ -1,4 +1,5 @@
 import random
+global etapas
 
 def next_empty(Board, i, j):
     idx = i*len(Board[0]) + j
@@ -83,9 +84,4 @@ def toFile(filename, n, board, solution):
     file.write("\n")
 
 
-create_puzzle(10)
-create_puzzle(5)
-create_puzzle(4)
-create_puzzle(3)
-create_puzzle(2)
-create_puzzle(1)
+create_puzzle(9)

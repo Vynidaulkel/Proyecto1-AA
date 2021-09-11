@@ -1,8 +1,11 @@
 from tkinter import *
 import tkinter as tk
+from tkinter import ttk
 from PIL import ImageTk, Image
 import random
+from time import time
 
+solucionBacktraking = ""
 
 #Crea la ventana principal
 raiz = tk.Tk() 
@@ -20,7 +23,7 @@ fondo.place(x=-5,y=-5)
 
 #Carga la imagen donde van los datos 
 comp = Image.open('comp.jpg')
-comp = comp.resize((500, 500), Image.ANTIALIAS) # Redimension (Alto, Ancho)
+comp = comp.resize((500, 515), Image.ANTIALIAS) # Redimension (Alto, Ancho)
 comp = ImageTk.PhotoImage(comp)
 mapa = Label(raiz, image=comp)
 mapa.pack()
@@ -33,7 +36,7 @@ mapa.place(x=200,y=100)
 etapas = False
 
 def BackTracking(matriz,solucion,fichas,i,j,aux):  #
-    global etapas
+    global etapas,solucionBacktraking
 
     #En caso que ya se guardo el numero en vertical con la fila anterior 
     if [i,j] in aux:
@@ -46,8 +49,7 @@ def BackTracking(matriz,solucion,fichas,i,j,aux):  #
 
     #Valida si ya se pasaron por todos los datos
     if i>=len(matriz):
-        print("La matriz es: ",matriz)
-        print("La solucion del algoritmo BackTracking es: ",solucion)
+        solucionBacktraking = solucion
         etapas= True 
         return 0
         
@@ -129,7 +131,6 @@ def BackTracking(matriz,solucion,fichas,i,j,aux):  #
             #En caso que ya se encontro la respuesta 
             if etapas==True:
                 return 0
-
         
             if i+1>=len(matriz):
                 if j>len(matriz[0]):
@@ -215,7 +216,6 @@ def create_puzzle(n):
     es posible que el algoritmo generador falle y no encuentre un tablero válido
     Si sucede, retorna falso y no genera ningún archivo de salida
     """
-
     board = make_board(n+1, n+2)
     tiles = make_tiles(n)
     random.shuffle(tiles)
@@ -235,37 +235,62 @@ def create_puzzle(n):
         else:
             return False
 
+    start_time = time()
     #Llama la funcion de backtracking y le pasa la matriz como parametro 
     BackTracking(board,[],[],0,0,[])
+ 
+    elapsed_time = time() - start_time
+    entry.delete(0,"end")
+    entry.insert(0, elapsed_time)
+    toFile(n, board)
 
-
-def toFile(filename, n, board, solution):    
-    file = open(filename+ ".txt", "w")
-    file.write(str(n) +  "\n")
-    file.write("\n")
-
+def toFile(n, board): 
+    listbox.delete(0,END)
     #tablero
+    listbox.insert(END, "Matriz de tamaño "+ str(n+2)+"x"+str(n+1))
+    listbox.insert(END, " ")
     for fila in board:
-        for e in fila:
-            file.write(str(e) + " ")
-        file.write("\n")
-    file.write("\n")
-            
-    for i in solution:
-        file.write(str(i) + " ")
-    file.write("\n")
+        listbox.insert(END,str(fila) + " ")
+    listbox.insert(END, " ")
+    listbox.insert(END,"La solcion del BackTracking es: "+ str(solucionBacktraking) + " ")
+         
 #_______________________________Crear_la_matriz________________________________________________
-
 
 def mostrarResultados():
     global etapas
-    create_puzzle(9)
+    #Le pasa el valor del combobox
+    create_puzzle(int(monthchoosen.get()))
     etapas=False
+    
+#____________________________Botones, combobox y labels________________________________________
 
-#____________________________Botones y labels__________________________________________________
+# Combobox
+n = tk.StringVar()
+monthchoosen = ttk.Combobox(raiz, width = 3, textvariable = n,state="readonly", font=("Georgia",12))
+monthchoosen['values'] = ( ' 1',' 2',' 3',' 4', ' 5',
+                          ' 6',' 7',' 8',' 9',' 10')
+monthchoosen.place(x = 460, y = 172)
+monthchoosen.current(0)
 
+#Botones 
 button1 = tk.Button(raiz, font=("Courier",22), bg="green", text="Start",height=0,width=8,command=mostrarResultados)
 button1.place(x=375,y=700)
+
+#TextBox
+txtfuerzabruta = ttk.Entry(raiz,width = 20)
+txtfuerzabruta.place(x=407, y=221)
+
+entry = ttk.Entry(raiz,width = 20)
+entry.place(x=412, y=267)
+
+#ListBox
+listbox = Listbox(raiz)
+listbox.place(relx=0.3,rely=0.43,relheight=0.3, relwidth=0.4)
+
+barra = Scrollbar(raiz,orient=HORIZONTAL)
+barra.place(x=270,y=570,relwidth=0.4)
+listbox.config(xscrollcommand=barra.set)
+barra.config(command=listbox.xview)
 
 
 raiz.mainloop() 

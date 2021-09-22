@@ -46,7 +46,7 @@ def BackTracking(matriz,solucion,fichas,i,j,aux):  #
             i+=1
         BackTracking(matriz,solucion,fichas,i,j,aux) 
         return 0
-
+        
     #Valida si ya se pasaron por todos los datos
     if i>=len(matriz):
         solucionBacktraking = solucion
@@ -149,7 +149,7 @@ def BackTracking(matriz,solucion,fichas,i,j,aux):  #
                     j-=2
             else:    
                 j-=2
-        
+
             solucion.pop()
             fichas.pop()
 
@@ -170,7 +170,7 @@ def BackTracking(matriz,solucion,fichas,i,j,aux):  #
             return 0
 #---------------------------------------------------------------------
 
-#----------------------Crear_la_matriz--------------------------------
+#----------------Crear_la_matriz:Funcion del profe--------------------------------
 def next_empty(Board, i, j):
     idx = i*len(Board[0]) + j
     for idx in range(i*len(Board[0]) + j, len(Board[0])* len(Board)):
@@ -235,15 +235,20 @@ def create_puzzle(n):
         else:
             return False
 
-    start_time = time()
+    start_time = time() #Toma el tiempo que dura la funcion
     #Llama la funcion de backtracking y le pasa la matriz como parametro 
     BackTracking(board,[],[],0,0,[])
  
-    elapsed_time = time() - start_time
-    entry.delete(0,"end")
-    entry.insert(0, elapsed_time)
-    toFile(n, board)
+    #Toma el tiempo que dura la funcion
+    elapsed_time = time() - start_time 
+    #Pone el timpo que duro en un txtbox en la interfaz
+    entry.delete(0,"end")  
+    entry.insert(0, elapsed_time) 
+    #Llama la funcion para poner la solucion y la matriz en la interfaz
+    toFile(n, board) 
 
+
+#Pone los datos como la matriz y solucion en el cuadro de texto de la interfaz 
 def toFile(n, board): 
     listbox.delete(0,END)
     #tablero
@@ -287,6 +292,7 @@ entry.place(x=412, y=267)
 listbox = Listbox(raiz)
 listbox.place(relx=0.3,rely=0.43,relheight=0.3, relwidth=0.4)
 
+#Barra de scroll de la listbox
 barra = Scrollbar(raiz,orient=HORIZONTAL)
 barra.place(x=270,y=570,relwidth=0.4)
 listbox.config(xscrollcommand=barra.set)

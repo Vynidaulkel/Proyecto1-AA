@@ -5,6 +5,7 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 import random
 from time import time
+from datetime import datetime
 
 solucionBacktraking = ""
 
@@ -50,7 +51,6 @@ def BackTracking(matriz,solucion,fichas,i,j,aux):  #
         
     #Valida si ya se pasaron por todos los datos
     if i>=len(matriz):
-        print(solucion)
         solucionBacktraking = solucion
         etapas= True 
         return 0
@@ -237,25 +237,32 @@ def create_puzzle(n):
         else:
             return False
 
-    start_time = time() #Toma el tiempo que dura la funcion
+     #Toma el tiempo que dura la funcion
+    t1 = datetime.now()
     #Llama la funcion de backtracking y le pasa la matriz como parametro 
     BackTracking(board,[],[],0,0,[])
-
-    #Llama a la funcion Fuerza Bruta
-    FuerzaBruta(board, n)
-    #create_puzzle(3)
- 
+    t2 = datetime.now()
+    totalSpent = t2 - t1
     #Toma el tiempo que dura la funcion
-    elapsed_time = time() - start_time 
     #Pone el timpo que duro en un txtbox en la interfaz
     entry.delete(0,"end")  
-    entry.insert(0, elapsed_time) 
+    entry.insert(0, totalSpent)
+
+    #Llama a la funcion Fuerza Bruta'
+    t3 = datetime.now()
+    solucionFuerzaBruta = FuerzaBruta(board, n)
+    t4 = datetime.now()
+    totalSpent2 = t4 - t3
+    txtfuerzabruta.delete(0, "end")
+    txtfuerzabruta.insert(0, totalSpent2)
+    print(solucionFuerzaBruta)
+
     #Llama la funcion para poner la solucion y la matriz en la interfaz
-    toFile(n, board) 
+    toFile(n, board, solucionFuerzaBruta) 
 
 
 #Pone los datos como la matriz y solucion en el cuadro de texto de la interfaz 
-def toFile(n, board): 
+def toFile(n, board, solucionFuerzaBruta): 
     listbox.delete(0,END)
     #tablero
     listbox.insert(END, "Matriz de tamaño "+str(n+1)+"x"+str(n+2))
@@ -263,7 +270,8 @@ def toFile(n, board):
     for fila in board:
         listbox.insert(END,str(fila) + " ")
     listbox.insert(END, " ")
-    listbox.insert(END,"La solcion del BackTracking es: "+ str(solucionBacktraking) + " ")
+    listbox.insert(END,"La solucion del BackTracking es: "+ str(solucionBacktraking) + " ")
+    listbox.insert(END, "La solucion de Fuerza Bruta es:   "+ str(solucionFuerzaBruta) + " ")
          
 #_______________________________Crear_la_matriz________________________________________________
 
@@ -278,8 +286,7 @@ def mostrarResultados():
 # Combobox
 n = tk.StringVar()
 monthchoosen = ttk.Combobox(raiz, width = 3, textvariable = n,state="readonly", font=("Georgia",12))
-monthchoosen['values'] = ( ' 1',' 2',' 3',' 4', ' 5',
-                          ' 6',' 7',' 8',' 9',' 10')
+monthchoosen['values'] = ( ' 1',' 2',' 3',' 4', ' 5')
 monthchoosen.place(x = 460, y = 172)
 monthchoosen.current(0)
 

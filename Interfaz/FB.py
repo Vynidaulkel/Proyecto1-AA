@@ -27,20 +27,19 @@ def busqueda(matriz, arregloSolucion):
         col = 0
         fichas = []
         fichasVerticales = []
+
         for i in n:
             print((i), row, col)
-            if i == 0:
-            
-                #verificacion cuando pasa de linea y se uso anteriormente un uno
-                if row > 0:
-                    #cuando row es 3 da error
-                    while [matriz[row][col], matriz[row-1][col]] in fichasVerticales:
-                        if col + 1 > colsMatriz:
-                            row+=1
-                            col = 0
-                        else: 
-                            col+=1
-                        print(i, row, col)
+            #cuando row es 3 da error
+            while [row,col] in fichasVerticales:
+                if col + 1 > colsMatriz:
+                    row+=1
+                    col = 0
+                else: 
+                    col+=1
+            print(i, row, col)
+
+            if i == 0: 
                 if col+1 <= colsMatriz:
                     if [matriz[row][col], matriz[row][col+1]] in fichas:
                         funciona = False
@@ -58,16 +57,8 @@ def busqueda(matriz, arregloSolucion):
                     print("Solucion no funcional: " + str(n))
                     break 
 
-
             elif i == 1:
-                #verificacion cuando pasa de linea y se uso anteriormente un uno
-                if row > 0:
-                    while [matriz[row][col], matriz[row-1][col]] in fichasVerticales:
-                        if col + 1 > colsMatriz:
-                            row+=1
-                            col = 0
-                        else: 
-                            col+=1
+           
                 if row+1 <= rowsMatriz:
                     #revisa si la ficha ya esta repetida o no
                     if [matriz[row][col], matriz[row+1][col]] in fichas:
@@ -76,7 +67,8 @@ def busqueda(matriz, arregloSolucion):
                         break 
                     fichas.append([matriz[row][col], matriz[row+1][col]])
                     fichas.append([matriz[row+1][col],matriz[row][col]])
-                    fichasVerticales.append([matriz[row+1][col],matriz[row][col]])
+                    fichasVerticales.append([row+1,col])
+
                     if col+1 > colsMatriz:
                         col=0
                         if row + 1 > rowsMatriz:

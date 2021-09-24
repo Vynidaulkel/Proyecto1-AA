@@ -50,6 +50,7 @@ def BackTracking(matriz,solucion,fichas,i,j,aux):  #
         
     #Valida si ya se pasaron por todos los datos
     if i>=len(matriz):
+        print(solucion)
         solucionBacktraking = solucion
         etapas= True 
         return 0

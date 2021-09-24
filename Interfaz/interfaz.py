@@ -1,3 +1,4 @@
+from FB import FuerzaBruta
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -238,6 +239,10 @@ def create_puzzle(n):
     start_time = time() #Toma el tiempo que dura la funcion
     #Llama la funcion de backtracking y le pasa la matriz como parametro 
     BackTracking(board,[],[],0,0,[])
+
+    #Llama a la funcion Fuerza Bruta
+    FuerzaBruta(board, n)
+    #create_puzzle(3)
  
     #Toma el tiempo que dura la funcion
     elapsed_time = time() - start_time 
@@ -252,7 +257,7 @@ def create_puzzle(n):
 def toFile(n, board): 
     listbox.delete(0,END)
     #tablero
-    listbox.insert(END, "Matriz de tamaño "+ str(n+2)+"x"+str(n+1))
+    listbox.insert(END, "Matriz de tamaño "+str(n+1)+"x"+str(n+2))
     listbox.insert(END, " ")
     for fila in board:
         listbox.insert(END,str(fila) + " ")

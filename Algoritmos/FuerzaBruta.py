@@ -1,5 +1,5 @@
 
-def FuerzaBruta(n):
+def FuerzaBruta(matriz, n):
     arregloSolucion = []
     posibilidades = [[]]*n
     CrearPermutaciones(posibilidades, n, arregloSolucion)
@@ -19,5 +19,3 @@ def CrearPermutaciones(A,n, pArregloSolucion):
 
 def busqueda():
     return
-
-FuerzaBruta(3)
